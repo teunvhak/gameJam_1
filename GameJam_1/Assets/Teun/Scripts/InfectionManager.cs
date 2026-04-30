@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using RangeAttribute = UnityEngine.RangeAttribute;
 
 public class InfectionManager : MonoBehaviour
 {
@@ -28,11 +27,33 @@ public class InfectionManager : MonoBehaviour
                 infection.infectionDensity = Mathf.Clamp(infection.infectionDensity + 0.01f, 0f, 1f);
             }
         }
+
+        foreach(var infected in Infected)
+        {
+            foreach(var infactable in Infectables)
+            {
+                float distance = Vector3.Distance(infected.transform.position, infactable.transform.position);
+                if(distance <= 2.5f || (infected.HasHarbour && infactable.HasHarbour) || (infected.HasAirport && infactable.HasAirport))
+                {
+                    if (!infected.Neighbours.Contains(infactable))
+                    {
+                        infected.Neighbours.Add(infactable);
+                        foreach(var neighbour in infected.Neighbours)
+                        {
+                            if (!neighbour.Neighbours.Contains(neighbour))
+                            {
+                                neighbour.Neighbours.Add(neighbour);
+                            }
+                        }
+                    }                   
+                }
+            }
+        }
     }
 
     public bool TryInfect(Infactable infactable)
     {
-        infactable.infectionChance = (infactable.infectionDensity / 10f) + 0.01f;
+        infactable.infectionChance = (infactable.infectionDensity / 10f) + infactable.neighbourInfectionDensity;
         float chance = Random.Range(0f, 1f);
         return chance <= infactable.infectionChance; 
     }
