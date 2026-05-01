@@ -4,18 +4,31 @@ using System.Collections.Generic;
 public class GameData 
 {
     //public List<TMP> Text = new List<TMP>();
-    public TMP Text = new();
-    public TMP1 Text1 = new();
+    public Offline Offline = new();
+    public InfectableCountries InfectableCountries = new();
 }
 [System.Serializable]
-public class TMP
+public class Offline
 {
-    public int TMPInt;
-    public float TMPFloat;
+    public int OfflineInt;
 }
 [System.Serializable]
-public class TMP1
+public class InfectableCountries
 {
-    public int TMPInt;
-    public float TMPFloat;
+    public List<Infected> Countries = new List<Infected>();
+}
+[System.Serializable]
+public class R
+{
+    public int e;
+    public int t;
+    public string bla;
+    public bool bas;
+}
+[System.Serializable]
+public class Infected
+{
+    public string name;
+    public float density;
+    public bool isInfected;
 }

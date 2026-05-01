@@ -670,7 +670,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OfflineScreen: {fileID: 83939288}
-  Time: {fileID: 0}
+  TimeText: {fileID: 316313643}
+  Progress: 0
 --- !u!1 &314569722
 GameObject:
   m_ObjectHideFlags: 0
