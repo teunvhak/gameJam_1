@@ -11,6 +11,7 @@ public class GameData
 public class Offline
 {
     public int OfflineInt;
+    public int Currency;
 }
 [System.Serializable]
 public class InfectableCountries
