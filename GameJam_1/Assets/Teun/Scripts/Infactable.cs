@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 using RangeAttribute = UnityEngine.RangeAttribute;
 
 public class Infactable : MonoBehaviour
@@ -24,7 +25,22 @@ public class Infactable : MonoBehaviour
     public bool HarbourResearch = true;
     public bool AirportResearch = true;
 
+    private void Awake()
+    {
+        SaveManager.instance.Load();
+        if (name == SaveManager.instance.Data.InfectableCountries.Countries.Find(n => n.name == gameObject.name)?.name)
+        {
+            var Infected = SaveManager.instance.Data.InfectableCountries.Countries.Find(x => x.name == gameObject.name);
+            infectionDensity = Infected.density;
+            IsInfected = Infected.isInfected;
 
+        }
+        for(int i = 0; i < SaveManager.instance.Data.Offline.OfflineInt;  i++)
+        {
+            Debug.Log("run infect" + SaveManager.instance.Data.Offline.OfflineInt);
+            InfectionManager.Instance.Infect();
+        }
+    }
     private void Update()
     {
         if (infectionDensity == 1f)
@@ -57,6 +73,28 @@ public class Infactable : MonoBehaviour
                 neighbour.neighbourInfectionDensity += infectionDensity / 15;
                 countedNeighbours.Add(neighbour);
             }
+        }
+        
+        if (infectionDensity > 0)
+        {
+            if (!SaveManager.instance.Data.InfectableCountries.Countries.Exists(n => n.name == gameObject.name))
+            {
+
+                SaveManager.instance.Data.InfectableCountries.Countries.Add(new Infected
+                {
+                    name = gameObject.name,
+                    density = infectionDensity,
+                    isInfected = IsInfected
+                });
+            }
+            else if(name == SaveManager.instance.Data.InfectableCountries.Countries.Find(n => n.name == gameObject.name)?.name)
+            {
+                var Infected = SaveManager.instance.Data.InfectableCountries.Countries.Find(x => x.name == gameObject.name);
+                Infected.density = infectionDensity;
+                Infected.isInfected = IsInfected;
+
+            }
+            SaveManager.instance.Save(SaveManager.instance.Data);
         }
     }
 }

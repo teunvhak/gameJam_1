@@ -20,7 +20,11 @@ public class InfectionManager : MonoBehaviour
 
     private void Update()
     {
-        foreach(var infection in Infectables)
+        Infect();
+    }
+    public void Infect()
+    {
+        foreach (var infection in Infectables)
         {
             if (TryInfect(infection))
             {
@@ -28,24 +32,24 @@ public class InfectionManager : MonoBehaviour
             }
         }
 
-        foreach(var infected in Infected)
+        foreach (var infected in Infected)
         {
-            foreach(var infactable in Infectables)
+            foreach (var infactable in Infectables)
             {
                 float distance = Vector3.Distance(infected.transform.position, infactable.transform.position);
-                if(distance <= 2.5f || (infected.HasHarbour && infactable.HasHarbour) || (infected.HasAirport && infactable.HasAirport))
+                if (distance <= 2.5f || (infected.HasHarbour && infactable.HasHarbour) || (infected.HasAirport && infactable.HasAirport))
                 {
                     if (!infected.Neighbours.Contains(infactable))
                     {
                         infected.Neighbours.Add(infactable);
-                        foreach(var neighbour in infected.Neighbours)
+                        foreach (var neighbour in infected.Neighbours)
                         {
                             if (!neighbour.Neighbours.Contains(neighbour))
                             {
                                 neighbour.Neighbours.Add(neighbour);
                             }
                         }
-                    }                   
+                    }
                 }
             }
         }
